@@ -154,7 +154,7 @@ def get_grid(model: Model) -> np.ndarray:
 
 def get_cargas(model: Model):
     return [(agent.unique_id, agent.carga) for agent in model.schedule.agents]
-
+    # Con el schedule puedes acceder a todos los agentes activos
 
 def get_sucias(model: Model) -> int:
     """
