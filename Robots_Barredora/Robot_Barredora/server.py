@@ -2,7 +2,8 @@ import random
 
 import mesa
 
-from .model import Habitacion, RobotLimpieza, Celda, Mueble
+from .model import Habitacion, RobotLimpieza, Celda, Mueble, Cargador
+
 
 MAX_NUMBER_ROBOTS = 20
 
@@ -14,6 +15,9 @@ def agent_portrayal(agent):
     elif isinstance(agent, Mueble):
         return {"Shape": "rect", "Filled": "true", "Color": "white", "Layer": 0,
                 "w": 0.9, "h": 0.9, "text_color": "Black", "text": "🪑"}
+    elif isinstance(agent, Cargador):
+        return {"Shape": "rect", "Filled": "true", "Color": "white", "Layer": 0,
+                "w": 0.9, "h": 0.9, "text_color": "Black", "text": "⚡"}
     elif isinstance(agent, Celda):
         portrayal = {"Shape": "rect", "Filled": "true", "Layer": 0, "w": 0.9, "h": 0.9, "text_color": "Black"}
         if agent.sucia:
@@ -29,6 +33,16 @@ grid = mesa.visualization.CanvasGrid(
     agent_portrayal, 20, 20, 400, 400)
 chart_celdas = mesa.visualization.ChartModule(
     [{"Label": "CeldasSucias", "Color": '#36A2EB', "label": "Celdas Sucias"}],
+    50, 200,
+    data_collector_name="datacollector"
+)
+chart_movimientos = mesa.visualization.ChartModule(
+    [{"Label": "Movimientos", "Color": '#3602EB', "label": "Movimientos de Robots"}],
+    50, 200,
+    data_collector_name="datacollector"
+)
+chart_cargas = mesa.visualization.ChartModule(
+    [{"Label": "Cargas", "Color": '#F602EB', "label": "Cargas Completas"}],
     50, 200,
     data_collector_name="datacollector"
 )
@@ -69,6 +83,6 @@ model_params = {
 }
 
 server = mesa.visualization.ModularServer(
-    Habitacion, [grid, chart_celdas],
-    "botCleaner", model_params, 8521
+    Habitacion, [grid, chart_celdas, chart_movimientos, chart_cargas],
+    "Robot_Barredora", model_params, 8521
 )
